@@ -336,3 +336,23 @@ end;
 -- call sp_update_vendedor(1, NULL, NULL, NULL, NULL, NULL); -- exibirá mensagem de erro
 call sp_update_vendedor(1, 'Fulano', '2017-07-21', 300, 150, 1);
 select * from vendedores;
+-----------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
+-- Tabela faturas:
+
+-- procedure de inserção:
+delimiter //
+create procedure sp_inserir_fatura(pData_ date, pId_cliente int, pId_vendedor int)
+begin
+	if(pData_ is null || pId_cliente is null || pId_vendedor is null) then
+		select 'Faltam um ou mais parâmetros.';
+	else
+		insert into faturas (data_, idclientes, idvendedores) values (pData_, pId_cliente, pId_vendedor);
+        select 'Inserido com sucesso!';
+	end if;
+end;
+//
+-- chamada da procedure:
+-- call sp_inserir_fatura(NULL, NULL, NULL); -- msg de erro
+call sp_inserir_fatura('2017-07-22', 1, 1);
+select * from faturas;
