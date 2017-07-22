@@ -63,7 +63,9 @@ foreign key (idfaturas) references faturas (idfaturas)
 );
 
 -- Questão 1: Para cada tabela, criar Stored procedures de inserção, exclusão e alteração:
+
 -- Tabela Cliente:
+-- procedure inserção:
 delimiter //
 create procedure sp_inserir_cliente(pNome_cliente varchar(45), pEndereco_cliente varchar(45), pCidade varchar(45), pCep varchar(45))
 begin
@@ -80,3 +82,20 @@ end;
 -- call sp_inserir_cliente(null, null, null, null);
 call sp_inserir_cliente('Jack', 'Rua dos Bobos', 'Terra do Nunca', '00.000-000');
 select * from clientes; -- conferindo a inserção
+
+-- procedure exclusão:
+delimiter //
+create procedure sp_delete_cliente(pId_cliente int)
+begin
+	if(pId_cliente is null) then
+		select 'Falta o ID.';
+	else
+		delete from clientes where idclientes = pId_cliente;
+        select 'Excluído com sucesso!';
+	end if;
+end;
+//
+-- chamada para a procedure:
+-- call sp_delete_cliente(NULL); -- exibirá mensagem de erro
+call sp_delete_cliente(2); -- deletará a pessoa de ID = 2
+select * from clientes;
