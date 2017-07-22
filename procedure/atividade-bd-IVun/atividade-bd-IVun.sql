@@ -193,3 +193,20 @@ end;
 -- call sp_inserir_local_trabalho(null); -- msg de erro
 call sp_inserir_local_trabalho('Dr. Octopus');
 select * from local_trabalho; -- conferindo...
+
+-- procedure de exclusão:
+delimiter //
+create procedure sp_delete_local_trabalho(pId_local_trabalho int)
+begin
+	if(pId_local_trabalho is null) then
+		select 'Está faltando o ID.';
+	else
+		delete from local_trabalho where idlocal_trabalho = pId_local_trabalho;
+        select 'Excluído com sucesso!';
+	end if;
+end;
+//
+-- chamada da procedure:
+-- call sp_delete_local_trabalho(null); -- msg de erro
+call sp_delete_local_trabalho(2); -- excluirá local de trabalho com id = 2
+select * from local_trabalho; -- conferindo...
