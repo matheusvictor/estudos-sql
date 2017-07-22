@@ -233,7 +233,7 @@ select * from local_trabalho; -- conferindo...
 
 -- procedure de inserção:
 delimiter //
-create procedure sp_inserir_pecas(pNome_peca varchar(45), pCusto_peca float, pId_armazenagem int)
+create procedure sp_inserir_peca(pNome_peca varchar(45), pCusto_peca float, pId_armazenagem int)
 begin
 	if(pNome_peca is null || pCusto_peca is null || pId_armazenagem is null) then
 		select 'Está faltando um ou mais parâmetros.';
@@ -244,6 +244,8 @@ begin
 end;
 //
 -- chamada da procedure:
--- call sp_inserir_pecas(null, null, null); -- msg de erro
-call sp_inserir_pecas('Parafuso', 10, 1); -- inserindo peça no armazem com id = 1
+-- call sp_inserir_peca(null, null, null); -- msg de erro
+call sp_inserir_peca('Parafuso', 10, 1); -- inserindo peça no armazem com id = 1
 select * from pecas; -- conferindo...
+
+-- procedure de exclusão:
