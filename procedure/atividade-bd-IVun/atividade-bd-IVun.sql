@@ -154,3 +154,20 @@ end;
 -- call sp_delete_armazenagem(NULL); -- exibirá mensagem de erro
 call sp_delete_armazenagem(2); -- deletará a pessoa de ID = 2
 select * from armazenagem;
+
+-- procedure de alteração:
+delimiter //
+create procedure sp_update_armazenagem(pId_armazenagem int, pLocal_armazenagem varchar(45), pQtde_estoque_armazenagem int)
+begin
+	if(pId_armazenagem is null || pLocal_armazenagem is null || pQtde_estoque_armazenagem is null) then
+		select 'Está faltando um ou mais parâmetros.';
+    else
+		update armazenagem set local_ = pLocal_armazenagem, qtde_estoque = pQtde_estoque_armazenagem
+        where idarmazenagem = pId_armazenagem;
+        select 'Alterado com sucesso!';
+    end if;
+end;
+//
+-- call sp_update_armazenagem(NULL, NULL, NULL);
+call sp_update_armazenagem(1, 'Townsville ', 300); -- alterará a armazenagem de ID = 1
+select * from armazenagem; -- conferindo...
