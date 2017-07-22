@@ -290,7 +290,6 @@ select * from pecas; -- conferindo...
 delimiter //
 create procedure sp_inserir_vendedor(pNome_vendedor varchar (45), pDatacontrato_vendedor date, pSalario_vendedor float, pComissao_vendedor float, pIdlocal_trabalho_vendedor int)
 begin
-	-- o if abaixo vai testar se o paramentro pNome está vazio
 	if (pNome_vendedor is null || pDatacontrato_vendedor is null || pSalario_vendedor is null || pComissao_vendedor is null || pIdlocal_trabalho_vendedor is null) then
 		select 'Faltando dados.'; -- mensagem de erro		
 	else
@@ -302,4 +301,20 @@ end;
 -- chamada para a procedure:
 -- call sp_inserir_vendedor(NULL, NULL, NULL, NULL, NULL); -- exibirá mensagem de erro
 call sp_inserir_vendedor('Halls', '2017-07-22', 200, 100, 1);
+select * from vendedores;
+
+-- procedure de exclusão:
+delimiter //
+create procedure sp_delete_vendedor(pId_vendedor int)
+begin
+	if (pId_vendedor is null) then
+		select 'Faltando o ID.'; -- mensagem de erro		
+	else
+		delete from vendedores where idvendedores = pId_vendedor;
+	end if;
+end;
+//
+-- chamada para a procedure:
+-- call sp_delete_vendedor(NULL); -- exibirá mensagem de erro
+call sp_delete_vendedor(2);
 select * from vendedores;
