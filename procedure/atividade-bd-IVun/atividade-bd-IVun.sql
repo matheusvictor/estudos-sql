@@ -65,6 +65,7 @@ foreign key (idfaturas) references faturas (idfaturas)
 
 -- Questão 1: Para cada tabela, criar Stored procedures de inserção, exclusão e alteração:
 
+-----------------------------------------------------------------------------------
 -- Tabela Cliente:
 -- procedure inserção:
 delimiter //
@@ -117,6 +118,7 @@ end;
 -- call sp_update_cliente(NULL, NULL, NULL, NULL, NULL); -- exibirá mensagem de erro
 call sp_update_cliente(1, 'Novo nome', 'Uma casa muito engraçada', 'NY', '00.000-001'); -- alterará a pessoa de ID = 1
 select * from clientes;
+-----------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------
 -- Tabela armazenagem:
 
@@ -171,3 +173,23 @@ end;
 -- call sp_update_armazenagem(NULL, NULL, NULL);
 call sp_update_armazenagem(1, 'Townsville ', 300); -- alterará a armazenagem de ID = 1
 select * from armazenagem; -- conferindo...
+-----------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
+-- Tabela local_trabalho:
+
+-- procedure de inserção:
+delimiter //
+create procedure sp_inserir_local_trabalho(pSupervisor varchar(45))
+begin
+	if(pSupervisor is null) then
+		select 'Está faltando parâmetro.';
+	else
+		insert into local_trabalho (supervisor) values (pSupervisor);
+        select 'Inserido com sucesso!';
+	end if;
+end;
+//
+-- chamada da procedure:
+-- call sp_inserir_local_trabalho(null); -- msg de erro
+call sp_inserir_local_trabalho('Dr. Octopus');
+select * from local_trabalho; -- conferindo...
