@@ -282,3 +282,24 @@ end;
 call sp_update_peca(null, null, null, null); -- msg de erro
 call sp_update_peca(1, 'Cimento', 5, 1);
 select * from pecas; -- conferindo...
+-----------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
+-- Tabela vendedores:
+
+-- procedure de inserção:
+delimiter //
+create procedure sp_inserir_vendedor(pNome_vendedor varchar (45), pDatacontrato_vendedor date, pSalario_vendedor float, pComissao_vendedor float, pIdlocal_trabalho_vendedor int)
+begin
+	-- o if abaixo vai testar se o paramentro pNome está vazio
+	if (pNome_vendedor is null || pDatacontrato_vendedor is null || pSalario_vendedor is null || pComissao_vendedor is null || pIdlocal_trabalho_vendedor is null) then
+		select 'Faltando dados.'; -- mensagem de erro		
+	else
+		insert into vendedores(nome, datacontrato, salario, comissao, idlocal_trabalho) values
+		(pNome_vendedor, pDatacontrato_vendedor, pSalario_vendedor, pComissao_vendedor, pIdlocal_trabalho_vendedor);
+	end if;
+end;
+//
+-- chamada para a procedure:
+-- call sp_inserir_vendedor(NULL, NULL, NULL, NULL, NULL); -- exibirá mensagem de erro
+call sp_inserir_vendedor('Halls', '2017-07-22', 200, 100, 1);
+select * from vendedores;
