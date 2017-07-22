@@ -99,3 +99,20 @@ end;
 -- call sp_delete_cliente(NULL); -- exibirá mensagem de erro
 call sp_delete_cliente(2); -- deletará a pessoa de ID = 2
 select * from clientes;
+
+-- procedure de alteração:
+delimiter //
+create procedure sp_update_cliente(pId_cliente int, pNome_cliente varchar(45), pEndereco_cliente varchar(45), pCidade varchar(45), pCep varchar(45))
+begin
+	if(pId_cliente is null || pNome_cliente is null || pEndereco_cliente is null || pCidade is null || pCep is null) then
+		select 'Falta(m) um ou mais parâmetros.';
+	else
+		update clientes set nome = pNome_cliente, endereco = pEndereco_cliente, cidade = pCidade, cep = pCep
+		where idclientes = pId_cliente;
+	end if;
+end;
+//
+-- chamada para a procedure:
+-- call sp_update_cliente(NULL, NULL, NULL, NULL, NULL); -- exibirá mensagem de erro
+call sp_update_cliente(1, 'Novo nome', 'Uma casa muito engraçada', 'NY', '00.000-001'); -- alterará a pessoa de ID = 1
+select * from clientes;
