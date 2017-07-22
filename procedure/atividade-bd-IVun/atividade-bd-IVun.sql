@@ -210,3 +210,22 @@ end;
 -- call sp_delete_local_trabalho(null); -- msg de erro
 call sp_delete_local_trabalho(2); -- excluirá local de trabalho com id = 2
 select * from local_trabalho; -- conferindo...
+
+-- procedure de alteração:
+delimiter //
+create procedure sp_update_local_trabalho(pId_local_trabalho int, pSupervisor varchar(45))
+begin
+	if(pId_local_trabalho is null || pSupervisor is null) then
+		select 'Está faltando parâmetros.';
+	else
+		update local_trabalho set supervisor = pSupervisor where idlocal_trabalho = pId_local_trabalho;
+        select 'Alterado com sucesso!';
+	end if;
+end;
+//
+-- chamada da procedure:
+-- call sp_update_local_trabalho(1, null); -- msg de erro
+call sp_update_local_trabalho(1, 'Tony Stark'); -- excluirá local de trabalho com id = 2
+select * from local_trabalho; -- conferindo...
+-----------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
