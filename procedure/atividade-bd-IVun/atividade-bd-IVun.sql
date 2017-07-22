@@ -229,3 +229,21 @@ call sp_update_local_trabalho(1, 'Tony Stark'); -- excluirá local de trabalho c
 select * from local_trabalho; -- conferindo...
 -----------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------
+-- Tabela pecas:
+
+-- procedure de inserção:
+delimiter //
+create procedure sp_inserir_pecas(pNome_peca varchar(45), pCusto_peca float, pId_armazenagem int)
+begin
+	if(pNome_peca is null || pCusto_peca is null || pId_armazenagem is null) then
+		select 'Está faltando um ou mais parâmetros.';
+	else
+		insert into pecas (nome, custo, idarmazenagem) values (pNome_peca, pCusto_peca, pId_armazenagem);
+        select 'Inserido com sucesso!';
+    end if;
+end;
+//
+-- chamada da procedure:
+-- call sp_inserir_pecas(null, null, null); -- msg de erro
+call sp_inserir_pecas('Parafuso', 10, 1); -- inserindo peça no armazem com id = 1
+select * from pecas; -- conferindo...
