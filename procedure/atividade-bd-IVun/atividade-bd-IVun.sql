@@ -249,3 +249,18 @@ call sp_inserir_peca('Parafuso', 10, 1); -- inserindo peça no armazem com id = 
 select * from pecas; -- conferindo...
 
 -- procedure de exclusão:
+delimiter //
+create procedure sp_delete_peca(pId_peca int)
+begin
+	if(pId_peca is null) then
+		select 'Está faltando o ID.';
+	else
+		delete from pecas where idpecas = pId_peca;
+        select 'Excluído com sucesso!';
+    end if;
+end;
+//
+-- chamada da procedure:
+-- call sp_delete_peca(null); -- msg de erro
+call sp_delete_peca(2); -- inserindo peça no armazem com id = 2
+select * from pecas; -- conferindo...
