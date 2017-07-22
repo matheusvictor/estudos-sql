@@ -391,3 +391,23 @@ end;
 -- call sp_update_fatura(NULL, NULL, NULL, NULL); -- msg de erro
 call sp_update_fatura(1, '2016-07-22', 1, 1); -- alterará a fatura com id = 1
 select * from faturas;
+-----------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
+-- Tabela itens:
+
+-- procedure de inserção:
+delimiter //
+create procedure sp_inserir_item(pId_peca int, pId_fatura int, pQuantidade int)
+begin
+	if(pId_peca is null || pId_fatura is null || pQuantidade is null) then
+		select 'Faltam um ou mais parâmetros.';
+	else
+		insert into itens (idpecas, idfaturas, quantidade) values (pId_peca, pId_fatura, pQuantidade);
+        select 'Inserido com sucesso!';
+	end if;
+end;
+//
+-- chamada da procedure:
+-- call sp_inserir_item(NULL, NULL, NULL); -- msg de erro
+call sp_inserir_item(1, 1, 100);
+select * from itens;
