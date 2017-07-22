@@ -225,7 +225,7 @@ end;
 //
 -- chamada da procedure:
 -- call sp_update_local_trabalho(1, null); -- msg de erro
-call sp_update_local_trabalho(1, 'Tony Stark'); -- excluirá local de trabalho com id = 2
+call sp_update_local_trabalho(1, 'Tony Stark'); -- alterará local de trabalho com id = 1
 select * from local_trabalho; -- conferindo...
 -----------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------
@@ -263,4 +263,22 @@ end;
 -- chamada da procedure:
 -- call sp_delete_peca(null); -- msg de erro
 call sp_delete_peca(2); -- inserindo peça no armazem com id = 2
+select * from pecas; -- conferindo...
+
+-- procedure de alteração:
+delimiter //
+create procedure sp_update_peca(pId_peca int, pNome_peca varchar(45), pCusto_peca float, pId_armazenagem int)
+begin
+	if(pId_peca is null || pNome_peca is null || pCusto_peca is null || pId_armazenagem is null) then
+		select 'Está faltando um ou mais parâmetros.';
+	else
+		update pecas set nome = pNome_peca, custo = pCusto_peca, idarmazenagem = pId_armazenagem
+        where idpecas = pId_peca;
+        select 'Alterado com sucesso!';
+    end if;
+end;
+//
+-- chamada da procedure:
+call sp_update_peca(null, null, null, null); -- msg de erro
+call sp_update_peca(1, 'Cimento', 5, 1);
 select * from pecas; -- conferindo...
