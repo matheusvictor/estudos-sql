@@ -3,7 +3,7 @@
 -- Estudantes: Carlos Henrique; Matheus Victor
 -- Série/Curso: 3° ano de TI
 
-
+-----------------------------------------------------------------------------------
 -- Criando o banco e suas tabelas: 
 create database loja;
 use loja;
@@ -61,6 +61,7 @@ quantidade int,
 foreign key (idpecas) references pecas (idpecas),
 foreign key (idfaturas) references faturas (idfaturas)
 );
+-----------------------------------------------------------------------------------
 
 -- Questão 1: Para cada tabela, criar Stored procedures de inserção, exclusão e alteração:
 
@@ -116,3 +117,23 @@ end;
 -- call sp_update_cliente(NULL, NULL, NULL, NULL, NULL); -- exibirá mensagem de erro
 call sp_update_cliente(1, 'Novo nome', 'Uma casa muito engraçada', 'NY', '00.000-001'); -- alterará a pessoa de ID = 1
 select * from clientes;
+-----------------------------------------------------------------------------------
+-- Tabela armazenagem:
+
+-- procedure de inserção:
+delimiter //
+create procedure sp_inserir_armazenagem(pLocal_armazenagem varchar(45), pQtde_estoque_armazenagem int)
+begin
+	if(pLocal_armazenagem is null || pQtde_estoque_armazenagem is null) then
+		select 'Está faltando parâmetros.';    
+    else
+		insert into armazenagem (local_, qtde_estoque) values
+        (pLocal_armazenagem, pQtde_estoque_armazenagem); 
+        select 'Inserido com sucesso!';
+    end if;
+end;
+//
+-- chamada para a procedure:
+-- call sp_inserir_armazenagem(NULL, NULL); -- exibirá mensagem de erro
+call sp_inserir_armazenagem('Fazenda do Sr. Jones', 200);
+select * from armazenagem;
