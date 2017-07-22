@@ -137,3 +137,20 @@ end;
 -- call sp_inserir_armazenagem(NULL, NULL); -- exibirá mensagem de erro
 call sp_inserir_armazenagem('Fazenda do Sr. Jones', 200);
 select * from armazenagem;
+
+-- procedure de exclusão:
+delimiter //
+create procedure sp_delete_armazenagem(pIdarmazenagem int)
+begin
+	if(pIdarmazenagem is null) then
+		select 'Está faltando o ID';
+	else
+		delete from armazenagem where idarmazenagem = pIdarmazenagem;
+        select 'Excluído com sucesso!';
+	end if;
+end;
+//
+-- chamada para a procedure:
+-- call sp_delete_armazenagem(NULL); -- exibirá mensagem de erro
+call sp_delete_armazenagem(2); -- deletará a pessoa de ID = 2
+select * from armazenagem;
