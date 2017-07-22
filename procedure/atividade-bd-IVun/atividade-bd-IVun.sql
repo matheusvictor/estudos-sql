@@ -373,3 +373,21 @@ end;
 -- call sp_delete_fatura(NULL); -- msg de erro
 call sp_delete_fatura(2); -- excluirá a fatura com id = 2
 select * from faturas; -- conferindo...
+
+-- procedure de alteração:
+delimiter //
+create procedure sp_update_fatura(pId_fatura int, pData_ date, pId_cliente int, pId_vendedor int)
+begin
+	if(pId_fatura is null || pData_ is null || pId_cliente is null || pId_vendedor is null) then
+		select 'Faltam um ou mais parâmetros.';
+	else
+		update faturas set data_ = pData_, idclientes = pId_cliente, idvendedores = pId_vendedor
+        where idfaturas = pId_fatura;
+        select 'Alterado com sucesso!';
+	end if;
+end;
+//
+-- chamada da procedure:
+-- call sp_update_fatura(NULL, NULL, NULL, NULL); -- msg de erro
+call sp_update_fatura(1, '2016-07-22', 1, 1); -- alterará a fatura com id = 1
+select * from faturas;
