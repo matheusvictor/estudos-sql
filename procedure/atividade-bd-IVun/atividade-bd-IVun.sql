@@ -62,3 +62,17 @@ foreign key (idpecas) references pecas (idpecas),
 foreign key (idfaturas) references faturas (idfaturas)
 );
 
+-- Questão 1: Para cada tabela, criar Stored procedures de inserção, exclusão e alteração:
+-- Tabela Cliente:
+
+delimiter //
+create procedure sp_inserir_cliente(pNome_cliente varchar(45), pEndereco_cliente varchar(45), pCidade_cliente varchar(45), pCep varchar(45))
+begin 
+	if(pNome_cliente is null || pEndereco_cliente is null || pCidade_cliente is null , pCep is null) then 
+select 'Faltando dados.'; 		
+	else
+		insert into cliente(nome, endereco, cidade, cep) values
+		(pNome_cliente, pEndereco_cliente, pCidade_cliente, pCep);
+	end if;
+end;
+//
