@@ -318,3 +318,21 @@ end;
 -- call sp_delete_vendedor(NULL); -- exibirá mensagem de erro
 call sp_delete_vendedor(2);
 select * from vendedores;
+
+-- procedure de alteração:
+delimiter //
+create procedure sp_update_vendedor(pId_vendedor int, pNome_vendedor varchar(45), pData_contrato_vendedor date, pSalario_vendedor float, pComissao_vendedor float, pId_local_trabalho int)
+begin
+	if (pId_vendedor is null || pNome_vendedor is null || pData_contrato_vendedor is null || pSalario_vendedor is null || pComissao_vendedor is null || pId_local_trabalho is null) then
+		select 'Faltando um ou mais parâmetros.'; -- mensagem de erro		
+	else
+		update vendedores set nome = pNome_vendedor, datacontrato = pData_contrato_vendedor, salario = pSalario_vendedor, comissao = pComissao_vendedor, idlocal_trabalho = pId_local_trabalho
+        where idvendedores = pId_vendedor;
+        select 'Alterado com sucesso!';
+	end if;
+end;
+//
+-- chamada para a procedure:
+-- call sp_update_vendedor(1, NULL, NULL, NULL, NULL, NULL); -- exibirá mensagem de erro
+call sp_update_vendedor(1, 'Fulano', '2017-07-21', 300, 150, 1);
+select * from vendedores;
