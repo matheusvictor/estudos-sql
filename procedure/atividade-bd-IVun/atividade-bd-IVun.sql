@@ -428,3 +428,22 @@ end;
 -- call sp_delete_item(NULL, NULL); -- msg de erro
 call sp_delete_item(1, 1);
 select * from itens;
+
+-- procedure de alteração:
+delimiter //
+create procedure sp_update_item(pId_peca int, pId_fatura int, pQuantidade int)
+begin
+	if(pId_peca is null || pId_fatura is null || pQuantidade is null) then
+		select 'Faltam um ou mais parâmetros.';
+	else
+		update itens set idpecas = pId_peca, idfaturas = pId_fatura, quantidade = pQuantidade
+        where idpecas = pId_peca and idfaturas = pId_fatura;
+        select 'Alterado com sucesso!';
+	end if;
+end;
+//
+-- chamada da procedure:
+-- call sp_update_item(NULL, NULL, NULL); -- msg de erro
+call sp_update_item(1, 3, 100); -- alterará a item com id = 3
+-----------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
