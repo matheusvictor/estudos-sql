@@ -356,3 +356,20 @@ end;
 -- call sp_inserir_fatura(NULL, NULL, NULL); -- msg de erro
 call sp_inserir_fatura('2017-07-22', 1, 1);
 select * from faturas;
+
+-- procedure de exclusão:
+delimiter //
+create procedure sp_delete_fatura(pId_fatura int)
+begin
+	if(pId_fatura is null) then
+		select 'Falta o ID.';
+	else
+		delete from faturas where idfaturas = pId_fatura;
+        select 'Excluído com sucesso!';
+	end if;
+end;
+//
+-- chamada da procedure:
+-- call sp_delete_fatura(NULL); -- msg de erro
+call sp_delete_fatura(2); -- excluirá a fatura com id = 2
+select * from faturas; -- conferindo...
