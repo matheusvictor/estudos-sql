@@ -411,3 +411,20 @@ end;
 -- call sp_inserir_item(NULL, NULL, NULL); -- msg de erro
 call sp_inserir_item(1, 1, 100);
 select * from itens;
+
+-- procedure de exclusão:
+delimiter //
+create procedure sp_delete_item(pId_peca int, pId_fatura int)
+begin
+	if(pId_peca is null || pId_fatura is null) then
+		select 'Faltam um ou mais parâmetros.';
+	else
+		delete from itens where idpecas =  pId_peca and idfaturas = pId_fatura;
+        select 'Excluído com sucesso!';
+	end if;
+end;
+//
+-- chamada da procedure:
+-- call sp_delete_item(NULL, NULL); -- msg de erro
+call sp_delete_item(1, 1);
+select * from itens;
