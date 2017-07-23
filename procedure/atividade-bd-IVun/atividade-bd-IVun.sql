@@ -447,3 +447,49 @@ end;
 call sp_update_item(1, 3, 100); -- alterará a item com id = 3
 -----------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------
+
+-- Questão 2: Além disso, faça relatórios por meio de visões contendo o seguinte:
+
+-----------------------------------------------------------------------------------
+
+-- vendedores e seus locais de trabalho:
+create view v_vendedor_localtrabalho as
+select vendedores.nome as VENDEDOR, local_trabalho.idlocal_trabalho as ID_LOCAL_TRABALHO, local_trabalho.supervisor as SUPERVISOR
+from local_trabalho inner join vendedores on local_trabalho.idlocal_trabalho = vendedores.idlocal_trabalho;
+
+SELECT * FROM v_vendedor_localtrabalho; -- chamando a view
+
+-- nome dos itens contidos em faturas, com os dados do cliente:
+create view v_item_fatura_cliente as
+select pecas.nome as NOME_ITEM, clientes.nome as CLIENTE, clientes.endereco as ENDERECO, clientes.cidade as CIDADE, clientes.cep as CEP
+from pecas inner join itens on pecas.idpecas = itens.idpecas
+inner join faturas on faturas.idfaturas = itens.idfaturas
+inner join clientes on clientes.idclientes = faturas.idclientes;
+
+SELECT * FROM v_item_fatura_cliente; -- chamando a view
+
+-- total de faturas por cliente:
+create view v_fatura_cliente as
+select clientes.nome as CLIENTE, count(faturas.idfaturas) as TOTAL_FATURAS
+from faturas inner join clientes on faturas.idclientes = clientes.idclientes
+group by CLIENTE;
+
+SELECT * FROM v_fatura_cliente;
+
+-- total de vendas de um vendedor:
+create view v_vendas_vendedor as
+select vendedores.nome as VENDEDOR, count(faturas.idfaturas) as TOTAL_VENDAS
+from faturas inner join vendedores on faturas.idvendedores = vendedores.idvendedores
+group by VENDEDOR;
+
+select * from v_vendas_vendedor ;
+
+-- lista de peças por local de armazenagem:
+create view v_pecas_armazenagem as
+select pecas.nome as PECA, armazenagem.idarmazenagem as ID_ARMAZEM, armazenagem.local_ as LOCAL_ARMAZENAGEM, armazenagem.qtde_estoque as ESTOQUE
+from armazenagem inner join pecas on pecas.idarmazenagem = armazenagem.idarmazenagem
+order by LOCAL_ARMAZENAGEM;
+
+select * from v_pecas_armazenagem;
+
+-- valor total de uma fatura:
