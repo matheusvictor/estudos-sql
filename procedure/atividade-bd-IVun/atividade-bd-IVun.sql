@@ -493,3 +493,9 @@ order by LOCAL_ARMAZENAGEM;
 select * from v_pecas_armazenagem;
 
 -- valor total de uma fatura:
+create view v_valortotal_fatura as
+select faturas.idfaturas as ID_FATURA, pecas.idpecas as ID_PECA, pecas.custo as CUSTO_PECA, itens.quantidade as QUANTIDADE, (pecas.custo * itens.quantidade) as VALOR_FATURA
+from pecas inner join itens on pecas.idpecas = itens.idpecas
+inner join faturas on itens.idfaturas = faturas.idfaturas;
+
+select * from v_valortotal_fatura;
