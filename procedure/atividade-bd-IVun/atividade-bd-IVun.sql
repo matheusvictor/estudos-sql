@@ -499,3 +499,21 @@ from pecas inner join itens on pecas.idpecas = itens.idpecas
 inner join faturas on itens.idfaturas = faturas.idfaturas;
 
 select * from v_valortotal_fatura;
+
+-- listar peças que não foram vendidas:
+create view v_pecas_nao_vendidas as
+select pecas.nome as PECA from pecas
+left join itens on pecas.idpecas = itens.idpecas
+left join faturas on faturas.idfaturas = itens.idfaturas;
+
+select * from v_pecas_nao_vendidas;
+
+-- Nome do vendedores que venderam a peça "pneu":
+create view v_vendedores_peca_pneu as
+select vendedores.nome as VENDEDOR from vendedores
+inner join faturas on faturas.idvendedores = vendedores.idvendedores
+inner join itens on itens.idfaturas = faturas.idfaturas
+inner join pecas on pecas.idpecas = itens.idpecas
+where pecas.nome = 'pneu';
+
+select * from v_vendedores_peca_pneu;
