@@ -24,12 +24,14 @@ INSERT INTO PRODUTOS VALUES (2, 'Descrição do produto 2', GETDATE(), '0123456789
 
 INSERT INTO PRODUTOS (CODIGO, DESCRICAO, EAN) VALUES (3, 'Descrição do produto 3', '0123456789'); -- serão inseridos só os valores declarados como NOT NULL. 
 																								  -- o campo IND_INATIVO vai receber o valor 0, pq foi defenido como default
-
 -- listagem de todos os campos de Produtos
 SELECT * FROM PRODUTOS;
 
--- listagem de todos os campos de Produtos o CODIGO seja igual a 2
+-- listagem de todos os campos de Produtos onde o CODIGO seja igual a 2
 SELECT * FROM PRODUTOS WHERE CODIGO = 2;
+
+-- listagem da descrição de Produtos onde o CODIGO seja igual a 2
+SELECT DESCRICAO FROM PRODUTOS WHERE CODIGO = 2;
 
 -- listagem de todos os campos de Produtos o CODIGO seja igual a 2.
 -- esse tipo de listagem, por ser não indexada, é mais lenta que a anterior pq tenta fazer essa busca de todos os dados que se aproximem ao valor passado no LIKE
@@ -38,3 +40,68 @@ SELECT * FROM PRODUTOS WHERE DESCRICAO LIKE '%Produto%';
 -- listagem por agregação, onde o retorno é a contagem dos dados inseridos na tabela Produtos
 -- AS QTD_PRODUTOS serve para apelidar o retorno da consulta
 SELECT COUNT(*) AS QTD_PRODUTOS FROM PRODUTOS;
+
+-- cria tabela Loja já com uma chave-primária
+CREATE TABLE LOJA (
+	CODIGO INT NOT NULL,
+	NOME VARCHAR(50) NOT NULL,
+	IND_INATIVO INT NOT NULL DEFAULT 0,
+	CONSTRAINT LOJA_PK PRIMARY KEY(CODIGO)
+);
+
+-- popula tabela Loja
+INSERT INTO LOJA (CODIGO, NOME) VALUES (1000, 'Tabajara');
+INSERT INTO LOJA (CODIGO, NOME) VALUES (2000, 'Filial Dolly');
+INSERT INTO LOJA (CODIGO, NOME) VALUES (3000, 'Loja do Adelino');
+
+
+-- cria tabela Estoque com chave-primária composta
+CREATE TABLE ESTOQUE (
+	CODIGO_PRODUTO INT NOT NULL,
+	CODIGO_FILIAL INT NOT NULL,
+	QUANTIDADE DECIMAL NOT NULL DEFAULT 0,
+	CONSTRAINT ESTOQUE_PK PRIMARY KEY(CODIGO_PRODUTO, CODIGO_FILIAL)
+);
+
+-- insere, propocitalmente, dados não normalizados
+INSERT INTO ESTOQUE(CODIGO_FILIAL, CODIGO_PRODUTO, QUANTIDADE) VALUES (99, 10, 1); -- não existe uma filial com código 99, por exemplo
+
+-- exclui todos os dados da tabela ESTOQUE
+DELETE FROM ESTOQUE;
+
+-- altera tabela ESTOQUE e adiciona FK para relacionar as tabelas ESTOQUE e LOJA
+ALTER TABLE ESTOQUE ADD CONSTRAINT FK_ESTOQUE_LOJA 
+FOREIGN KEY (CODIGO_PRODUTO)
+REFERENCES PRODUTOS(CODIGO);
+
+-- altera tabela ESTOQUE e exclui coluna específica
+ALTER TABLE ESTOQUE DROP CONSTRAINT FK_ESTOQUE_LOJA;
+
+ALTER TABLE ESTOQUE ADD CONSTRAINT FK_ESTOQUE_LOJA 
+FOREIGN KEY (CODIGO_FILIAL)
+REFERENCES LOJA(CODIGO);
+
+-- altera tabela ESTOQUE e adiciona FK para relacionar as tabelas ESTOQUE e PRODUTOS
+ALTER TABLE ESTOQUE ADD CONSTRAINT FK_ESTOQUE_PRODUTOS 
+FOREIGN KEY (CODIGO_PRODUTO)
+REFERENCES PRODUTOS(CODIGO);
+
+-- a inserção não será mais válida pois é feito a validação dos valores de acordo com a relação das tabelas
+-- o código do produto não existe
+INSERT INTO ESTOQUE(CODIGO_PRODUTO, CODIGO_FILIAL, QUANTIDADE) VALUES (99, 1, 1);
+
+-- a inserção não será mais válida pois é feito a validação dos valores de acordo com a relação das tabelas
+-- o código da filial não existe
+INSERT INTO ESTOQUE(CODIGO_PRODUTO, CODIGO_FILIAL, QUANTIDADE) VALUES (1, 10, 1);
+
+-- o código da filial e do produto não existem
+INSERT INTO ESTOQUE(CODIGO_PRODUTO, CODIGO_FILIAL, QUANTIDADE) VALUES (99, 10, 1);
+
+-- inserção com sucesso
+INSERT INTO ESTOQUE(CODIGO_PRODUTO, CODIGO_FILIAL, QUANTIDADE) VALUES (1, 1000, 1);
+
+-- consulta relacionando tabelas
+SELECT ESTOQUE.CODIGO_FILIAL, LOJA.NOME, ESTOQUE.CODIGO_PRODUTO, PRODUTOS.DESCRICAO
+FROM ESTOQUE
+	INNER JOIN LOJA ON ESTOQUE.CODIGO_FILIAL = LOJA.CODIGO 
+	INNER JOIN PRODUTOS ON ESTOQUE.CODIGO_PRODUTO = PRODUTOS.CODIGO;
